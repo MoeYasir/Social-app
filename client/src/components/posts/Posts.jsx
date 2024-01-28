@@ -1,0 +1,32 @@
+import Post from "../post/Post";
+import "./posts.scss";
+import { makeRequest } from "../../axios";
+
+import {
+  useQuery
+} from '@tanstack/react-query'
+
+const Posts = ({ userId }) => {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => ((
+
+      await makeRequest.get("/posts?userId=" + userId)).data),
+  });
+
+
+
+
+  return <div className="posts">
+    {
+      error ? "Something went wrong!" :
+        (isLoading ? "Loading" :
+          data.map(post => (
+            <Post post={post} key={post.id} />
+          )))}
+  </div>;
+};
+
+export default Posts;
+
+
